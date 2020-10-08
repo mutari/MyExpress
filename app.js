@@ -1,12 +1,32 @@
-const express = require("express");
-const app = express();
-const port = process.env.PORT | 3000;
+console.clear();
+const app = require('./MyExpress');
 
-app.get('/', (req, res) => {
-    res.send('hello wrold');
+app.get('/', mv, (req, res, next) => {
+    console.log('index');
+    res.end("index " + req.test);
 });
 
-app.listen(port, err => {
-    if(err) console.error(err);
-    else console.log()
+function mv(req, res, next) {
+    req.test = "DOG";
+    console.log("test mv");
+    next();
+    console.log("test2 mv");
+}
+
+app.get('/path', (req, res) => {
+    res.end("path")
 });
+
+app.get('/name/:name', (req, res) => {
+    res.end("Hello: ");
+});
+
+app.get('/name', (req, res) => {
+    res.end("Hello!");
+});
+
+app.get('/book/:name/user/:username', (req, res) => {
+    res.end(`Book: ${req.params.name}, user: ${req.params.username}`);
+})
+
+app.listen(8000);
