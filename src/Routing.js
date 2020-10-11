@@ -41,6 +41,8 @@ function add(method, path, ...args) {
  * @param {string} method request method
  */
 function routing(path, method) {
+    path = path.split('?')[0];
+    console.log(path);
     for(var route = 0; route < routes.length; route++) 
         if(matchRoute(path, routes[route].path) && routes[route].method == method) 
             return routes[route];
@@ -66,6 +68,7 @@ function ifParamTransParam(pathParam, routeParam) {
 }
 
 function getParams(path, route = this.path) {
+    path = path.split('?')[0];
     path = path.split('/').slice(1);
     route = route.split('/').slice(1);
     params = {}
