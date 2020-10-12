@@ -18,5 +18,8 @@
   "homepage": "https://github.com/mutari/MyExpress#readme",
   "dependencies": {
     "websocket": "^1.0.32"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.3"
   }
 }

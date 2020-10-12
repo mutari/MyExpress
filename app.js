@@ -1,8 +1,8 @@
 console.clear();
-const app = require('./src/MyExpress');
+const MyExpress = require('./test/MyExpress');
+console.log(MyExpress)
+const app = new MyExpress();
 const WebSocketServer = require('websocket');
-
-app.init();
 
 app.set('socket', WebSocketServer);
 
@@ -12,13 +12,17 @@ app.socket.connect((con) => {
 })
 
 app.get('/', (req, res, next) => {
-    console.log('index', res);
+    console.log('index', typeof res.end);
     res.sendFile('public/index.html')
-    res.end("index " + req.test);
+    res.end("index " + req.query.test);
 });
 
 app.get('/path', (req, res) => {
-    res.end("path")
+    let obj = res;
+
+    console.log(obj.end)
+
+    res.end("path");
 });
 
 app.get('/name/:name', (req, res) => {

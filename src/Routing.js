@@ -1,5 +1,3 @@
-const { Console } = require("console");
-
 const routes = [{
     method: "ALL",
     path: '*', 
