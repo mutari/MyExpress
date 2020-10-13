@@ -5,31 +5,33 @@ const   http = require('http'),
         path = require('path');
 
 
-const   routing = require('./Routing'),
-        socket = require('./MySocket'),
-        response = require('./Response');
+const   Routing = require('./Routing'),
+        Socket = require('./MySocket'),
+        MyResponse = require('./Response');
 
 
 class MyExpress {
 
+    private routing;
     private server;
     private socket;
     public static next;
 
     constructor() {
-        this.server = http.createServer(function(res, req) {
-            res = Object.assign(res, response);
+        this.routing = new Routing();
+        this.server = http.createServer((req, res) => {
+            MyResponse.response = res;
+            MyResponse.request = req;
+            res = Object.assign(res, this.addResponsFunctions());
 
-            console.log("test");
-
-            let route = routing.routing(req.url, req.method)
+            let route = this.routing.routing(req.url, req.method)
             if(route.path == '*')
                 return route.functions[0](req, res);
             req.params = route.getParams(req.url);
             req.query = url.parse(req.url, true).query;
 
             //Running mv if there is eny
-            MyExpress.next = (new Cursor(req, res, route.functions)).process
+            MyExpress.next = (new Cursor(req, res, route.functions)).process;
             MyExpress.next(req, res);
             //route.functions[0](req, res);
         }) 
@@ -45,17 +47,24 @@ class MyExpress {
     }
 
     public get(path: string, ...args) {
-        routing.add("GET", path, ...args);
+        this.routing.add("GET", path, ...args);
     }
 
     public post(path: string, ...args) {
-        routing.add("POST", path, ...args);
+        this.routing.add("POST", path, ...args);
     }
 
     public set(named: string, functions) {
         if(named == 'socket') {
-            socket.init(this.server, functions);
-            this.socket = socket;
+            this.socket = new Socket(this.server, functions);
+        }
+    }
+
+    private addResponsFunctions() {
+        return {
+            sendFile: MyResponse.sendFile,
+            send: MyResponse.send, 
+            json: MyResponse.json
         }
     }
 
@@ -66,3 +75,5 @@ function Cursor(req, res, args, index = 0) {
         args[index++](req, res, MyExpress.next)
     }
 }
+
+export = MyExpress;

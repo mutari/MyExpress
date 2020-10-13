@@ -1,13 +1,24 @@
-module.exports = {
-    sendFile: sendFile,
-    send: send
+"use strict";
+var fs = require('fs');
+class response {
+    static sendFile(path) {
+        var stat = fs.statSync(path);
+        response.response.writeHead(200, {
+            'Content-Type': 'text/html',
+            'Content-Length': stat.size
+        });
+        var readStream = fs.createReadStream(path);
+        readStream.pipe(response.response);
+    }
+    static json(json_data) {
+        response.response.writeHead(200, {
+            'Content-type': 'text/json'
+        });
+        response.response.write(json_data);
+    }
+    static send(data) {
+        response.response.write(data);
+    }
 }
-
-function send(data) {
-    
-}
-
-function sendFile(path) {
-    path = __dirname + "/../" + path;
-    console.log('path', path)
-}
+module.exports = response;
+//# sourceMappingURL=Response.js.map

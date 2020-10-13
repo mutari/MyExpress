@@ -1,18 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>WebSocket Playground</title>
-</head>
-<body>
-</body>
-<script>
-const ws = new WebSocket('ws://localhost:9898/');
-ws.onopen = function() {
-    console.log('WebSocket Client Connected');
-    ws.send('Hi this is web client.');
-};
-ws.onmessage = function(e) {
-  console.log("Received: '" + e.data + "'");
-};
-</script>
+  <head>
+    <title>WebSocket Playground</title>
+  </head>
+  <body>
+    <h1>Hello wrold</h1>
+    <input type="text" id="text_input">
+    <input type="submit" value="send" id="send">
+  </body>
+  <script>
+    const ws = new WebSocket('ws://localhost:8000/');
+    
+    ws.onopen = function() {
+        console.log('WebSocket Client Connected');
+        ws.send('player this is a test');
+    };
+
+    ws.onmessage = function(message) {
+      console.log("Received: '" + message.data + "'");
+    };
+
+    let value = document.querySelector("#text_input").value;
+    document.querySelector("#send").addEventListener("click", (e) => {
+      e.preventDefault();
+      ws.send('send ' + value);
+    })
+
+  </script>
 </html>

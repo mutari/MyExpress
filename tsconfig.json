@@ -3,7 +3,7 @@
         "target": "ESNext",
         "module": "commonjs",
         "sourceMap": true,
-        "outDir": "test",
+        "outDir": "src",
         "rootDir": "typescript"
     }
 }

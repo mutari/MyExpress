@@ -4,7 +4,7 @@ enum METHOD {
     ALL
 }
 
-export class Routing {
+class Routing {
 
     public static METHOD = METHOD;
 
@@ -23,7 +23,7 @@ export class Routing {
      * adds routes to the routes array
      * @param {string} method the method of the url to add
      * @param {string} path the path of the url to add
-     * @param  {...functions} args midelware and end funktions to call 
+     * @param {...functions} args midelware and end funktions to call 
      */
     public add(method: METHOD, path: string, ...args) {
         if(path == "*") {
@@ -51,7 +51,6 @@ export class Routing {
      */
     public routing(path: string, method: METHOD) {
         path = path.split('?')[0];
-        console.log(path);
         for(var route = 0; route < this.routes.length; route++) 
             if(this.matchRoute(path, this.routes[route].path) && this.routes[route].method == method) 
                 return this.routes[route];
@@ -93,3 +92,5 @@ function getParams(path, route = this.path) {
     }
     return params;
 }
+
+export = Routing;
