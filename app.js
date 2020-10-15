@@ -1,6 +1,8 @@
 console.clear();
 const MyExpress = require('./src/MyExpress');
 const app = new MyExpress();
+
+//setting up socket
 const WebSocketServer = require('websocket');
 
 app.set('socket', WebSocketServer);
@@ -10,18 +12,32 @@ app.socket.connect((con) => {
     console.log("socket: ");
 })
 
-app.socket.on('player', (data) => {
-    //console.log(data.data);
+app.socket.on('player', (con, data) => {
+    console.log(data.content);
 })
 
-app.socket.on('send', (data) => {
+app.socket.on('send', (con, data) => {
     console.log(data);
+    con.send('hello wrold');
 })
 
 app.socket.close((close) => {
     console.log("Sombody left: " + close);
 })
 
+//seting up global mv
+app.use((req, res, next) => {
+    console.log('Test')
+    next();
+})
+
+app.use((req, res, next) => {
+    console.log('Test2')
+    next();
+})
+
+
+//setting up paths
 app.get('/', (req, res, next) => {
     console.log('index', typeof res.end);
     res.sendFile(__dirname + '/public/index.html')

@@ -16,22 +16,28 @@ class MyExpress {
     private server;
     private socket;
     public static next;
+    private globalMV = [];
 
     constructor() {
         this.routing = new Routing();
         this.server = http.createServer((req, res) => {
+            //set up MyResponse objekt
             MyResponse.response = res;
-            MyResponse.request = req;
             res = Object.assign(res, this.addResponsFunctions());
 
+            //route path
             let route = this.routing.routing(req.url, req.method)
             if(route.path == '*')
                 return route.functions[0](req, res);
+            
+            //add querys and params
             req.params = route.getParams(req.url);
             req.query = url.parse(req.url, true).query;
+            
+            let CallStack = [...this.globalMV, ...route.functions];
 
             //Running mv if there is eny
-            MyExpress.next = (new Cursor(req, res, route.functions)).process;
+            MyExpress.next = (new Cursor(req, res, CallStack)).process;
             MyExpress.next(req, res);
             //route.functions[0](req, res);
         }) 
@@ -58,6 +64,10 @@ class MyExpress {
         if(named == 'socket') {
             this.socket = new Socket(this.server, functions);
         }
+    }
+
+    public use(_callback: Function) {
+        this.globalMV.push(_callback);
     }
 
     private addResponsFunctions() {

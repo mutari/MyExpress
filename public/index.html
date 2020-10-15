@@ -13,17 +13,17 @@
     
     ws.onopen = function() {
         console.log('WebSocket Client Connected');
-        ws.send('player this is a test');
+        ws.send(JSON.stringify({path: 'player', content: 'hello player'}));
     };
 
     ws.onmessage = function(message) {
       console.log("Received: '" + message.data + "'");
     };
 
-    let value = document.querySelector("#text_input").value;
     document.querySelector("#send").addEventListener("click", (e) => {
       e.preventDefault();
-      ws.send('send ' + value);
+      let value = document.querySelector("#text_input").value;
+      ws.send(JSON.stringify({path: 'send', content: 'this is a send'}));
     })
 
   </script>

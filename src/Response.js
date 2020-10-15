@@ -4,7 +4,7 @@ class response {
     static sendFile(path) {
         var stat = fs.statSync(path);
         response.response.writeHead(200, {
-            'Content-Type': 'text/html',
+            'Content-Type': response.getContentType(path.split('.').pop()),
             'Content-Length': stat.size
         });
         var readStream = fs.createReadStream(path);
@@ -19,6 +19,34 @@ class response {
     static send(data) {
         response.response.write(data);
     }
+    static getContentType(type) {
+        for (let i = 0; i < response.ContentTypes.length; i++)
+            if (response.ContentTypes[i].type == type)
+                return response.ContentTypes[i].content;
+        return 'text/plain';
+    }
 }
+response.ContentTypes = [
+    {
+        type: 'html',
+        content: 'text/html'
+    },
+    {
+        type: 'pdf',
+        content: 'applicaation/pdf'
+    },
+    {
+        type: 'jpeg',
+        content: 'image/jpeg'
+    },
+    {
+        type: 'png',
+        content: 'image/png'
+    },
+    {
+        type: 'mp4',
+        content: 'video/mp4'
+    }
+];
 module.exports = response;
 //# sourceMappingURL=Response.js.map

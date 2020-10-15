@@ -11,21 +11,24 @@ class MySocket {
     connect(_callback) {
         this.wsServer.on('request', (request) => {
             let con = request.accept(null, request.origin);
+            /*
+            con.send = function(path: string, data: string) {
+                
+            }*/
             con.on('message', (data) => {
-                let path = data.utf8Data.split(' ')[0];
-                data = {
-                    path: path,
-                    data: data.utf8Data.split(' ').slice(1).join(' ')
-                };
+                data = JSON.parse(data.utf8Data);
+                console.log(data);
                 this.socketRoutes.forEach(r => {
-                    if (r.path == path)
-                        r.func(data);
+                    if (r.path == data.path)
+                        r.func(con, data);
                 });
             });
             con.on('close', this.funcClose);
         });
     }
     ;
+    send(path, data) {
+    }
     on(path, _callback) {
         this.socketRoutes.push({ path: path, func: _callback });
     }
