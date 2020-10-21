@@ -88,7 +88,7 @@ function getParams(path, route = this.path) {
     let params = {}
     for(var i = 0; i < path.length; i++) {
         if(route[i].slice(0, 1) == ':')
-            params[route[i].slice(1)] = path[i];
+            params[route[i].slice(1)] = path[i].replace(/%20/g, ' ');
     }
     return params;
 }

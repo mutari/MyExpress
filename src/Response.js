@@ -18,6 +18,7 @@ class response {
     }
     static send(data) {
         response.response.write(data);
+        response.response.end();
     }
     static getContentType(type) {
         for (let i = 0; i < response.ContentTypes.length; i++)

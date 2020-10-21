@@ -30,6 +30,7 @@ class response {
 
     public static send(data) {
         response.response.write(data);
+        response.response.end();
     }
 
     private static getContentType(type) {

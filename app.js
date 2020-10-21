@@ -1,6 +1,6 @@
 console.clear();
-const MyExpress = require('./src/MyExpress');
-const app = new MyExpress();
+const ServerLite = require('./src/ServerLite');
+const app = new ServerLite();
 
 //setting up socket
 const WebSocketServer = require('websocket');

@@ -10,7 +10,7 @@ const   Routing = require('./Routing'),
         MyResponse = require('./Response');
 
 
-class MyExpress {
+class ServerLite {
 
     private routing;
     private server;
@@ -37,8 +37,8 @@ class MyExpress {
             let CallStack = [...this.globalMV, ...route.functions];
 
             //Running mv if there is eny
-            MyExpress.next = (new Cursor(req, res, CallStack)).process;
-            MyExpress.next(req, res);
+            ServerLite.next = (new Cursor(req, res, CallStack)).process;
+            ServerLite.next(req, res);
             //route.functions[0](req, res);
         }) 
     }
@@ -85,8 +85,8 @@ class MyExpress {
 
 function Cursor(req, res, args, index = 0) {
     this.process = () => {
-        args[index++](req, res, MyExpress.next)
+        args[index++](req, res, ServerLite.next)
     }
 }
 
-export = MyExpress;
+export = ServerLite;
