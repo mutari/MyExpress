@@ -12,19 +12,20 @@ app.socket.connect((con) => {
     console.log("socket: ");
 })
 
-app.socket.on('player', (con, data) => {
+app.socket.on('player', (data, con) => {
     console.log(data.content);
 })
 
-app.socket.on('send', (con, data) => {
-    console.log(data);
-    con.send('hello wrold');
+app.socket.on('send', (data, con) => {
+    console.log("send::", data);
+    con.send('hello', 'hello wrold');
 })
 
 app.socket.close((close) => {
     console.log("Sombody left: " + close);
 })
 
+/*
 //seting up global mv
 app.use((req, res, next) => {
     console.log('Test')
@@ -35,7 +36,7 @@ app.use((req, res, next) => {
     console.log('Test2')
     next();
 })
-
+*/
 
 //setting up paths
 app.get('/', (req, res, next) => {
@@ -43,6 +44,12 @@ app.get('/', (req, res, next) => {
     res.sendFile(__dirname + '/public/index.html')
     //res.end("index " + req.query.test);
 });
+
+app.post('/test', (req, res) => {
+    req.on('data', data => {
+        console.log(data.toString());
+    })
+})
 
 app.get('/path', (req, res) => {
     let obj = res;

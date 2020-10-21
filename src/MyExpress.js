@@ -43,6 +43,9 @@ class MyExpress {
     set(named, functions) {
         if (named == 'socket') {
             this.socket = new Socket(this.server, functions);
+            this.get('/MySocket/socket', (req, res, next) => {
+                res.sendFile(__dirname + "/MyClientSocket.js");
+            });
         }
     }
     use(_callback) {

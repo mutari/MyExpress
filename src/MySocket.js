@@ -11,16 +11,16 @@ class MySocket {
     connect(_callback) {
         this.wsServer.on('request', (request) => {
             let con = request.accept(null, request.origin);
-            /*
-            con.send = function(path: string, data: string) {
-                
-            }*/
+            const connectionOBJ = {
+                send: (path, data) => {
+                    con.send(JSON.stringify({ path: path, data: data }));
+                }
+            };
             con.on('message', (data) => {
                 data = JSON.parse(data.utf8Data);
-                console.log(data);
                 this.socketRoutes.forEach(r => {
                     if (r.path == data.path)
-                        r.func(con, data);
+                        r.func(data, connectionOBJ);
                 });
             });
             con.on('close', this.funcClose);
@@ -28,6 +28,7 @@ class MySocket {
     }
     ;
     send(path, data) {
+        this.wsServer.send(JSON.stringify({ path: path, data: data }));
     }
     on(path, _callback) {
         this.socketRoutes.push({ path: path, func: _callback });

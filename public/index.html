@@ -5,26 +5,31 @@
   </head>
   <body>
     <h1>Hello wrold</h1>
-    <input type="text" id="text_input">
-    <input type="submit" value="send" id="send">
+    <form action="/test" method="post">
+      <input type="text" name="test" id="text_input">
+      <input type="text" name="name" placeholder="name">
+      <input type="submit" value="send" id="send">
+    </form>
   </body>
+  <script src="/MySocket/socket"></script>
   <script>
-    const ws = new WebSocket('ws://localhost:8000/');
-    
-    ws.onopen = function() {
-        console.log('WebSocket Client Connected');
-        ws.send(JSON.stringify({path: 'player', content: 'hello player'}));
-    };
 
-    ws.onmessage = function(message) {
-      console.log("Received: '" + message.data + "'");
-    };
+    const socket = new MyClientSocket('localhost', 8000);
+
+    socket.connect(() => {
+      console.log("Socket connected");
+      socket.send('send', "this is a test");
+    });
+
+    socket.listen('hello', (data) => {
+      console.log("hello path:: ", data)
+    })
 
     document.querySelector("#send").addEventListener("click", (e) => {
       e.preventDefault();
       let value = document.querySelector("#text_input").value;
-      ws.send(JSON.stringify({path: 'send', content: 'this is a send'}));
-    })
+      socket.send(JSON.stringify({path: 'send', content: 'this is a send'}));
+  })
 
   </script>
 </html>
